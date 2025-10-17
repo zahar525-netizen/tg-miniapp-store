@@ -117,50 +117,81 @@
 
   <script>
     const categories = [
-  { id: "vaporesso", name: "Vaporesso" },
-  { id: "voopoo", name: "Voopoo" },
-  { id: "akkum", name: "Аккумуляторы" },
-  { id: "geekvape", name: "GeekVape" },
-  { id: "lostmary", name: "LOST MARY" },
-  { id: "soak", name: "Soak" },
-];
-
-
-    const products = [
-  { id: 1, cat: "vaporesso", name: "Vaporesso LUXE X PRO White", price: 2990, img: "https://via.placeholder.com/300x200?text=LUXE+X+PRO+White" },
-  { id: 2, cat: "vaporesso", name: "Vaporesso XROS 4 Champange Gold", price: 3990, img: "https://via.placeholder.com/300x200?text=XROS+4+Champange+Gold" },
-  { id: 3, cat: "vaporesso", name: "Vaporesso XROS 4 Green", price: 3990, img: "https://via.placeholder.com/300x200?text=XROS+4+Green" },
-  { id: 4, cat: "vaporesso", name: "Vaporesso XROS 4 MINI Champange Gold", price: 2790, img: "https://via.placeholder.com/300x200?text=XROS+4+MINI+Champange+Gold" },
-  { id: 5, cat: "vaporesso", name: "Vaporesso XROS CUBE Bondi blue", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Bondi+blue" },
-  { id: 6, cat: "vaporesso", name: "Vaporesso XROS CUBE Forest Green", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Forest+Green" },
-  { id: 7, cat: "vaporesso", name: "Vaporesso XROS CUBE Ocean Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Ocean+Blue" },
-  { id: 8, cat: "vaporesso", name: "Vaporesso XROS CUBE Sakura pink", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Sakura+pink" },
-  { id: 9, cat: "vaporesso", name: "Vaporesso XROS PRO Pink", price: 4500, img: "https://via.placeholder.com/300x200?text=XROS+PRO+Pink" },
-  { id: 10, cat: "voopoo", name: "Voopoo Argus Pro 2 Pearl White", price: 3990, img: "https://via.placeholder.com/300x200?text=Argus+Pro+2+Pearl+White" },
-  { id: 11, cat: "voopoo", name: "Voopoo Argus Pro 2 Space Grey", price: 3990, img: "https://via.placeholder.com/300x200?text=Argus+Pro+2+Space+Grey" },
-  { id: 12, cat: "voopoo", name: "Voopoo VMATE PRO Dawn Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Dawn+Blue" },
-  { id: 13, cat: "voopoo", name: "Voopoo VMATE PRO Mint Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Mint+Blue" },
-  { id: 14, cat: "voopoo", name: "Voopoo VMATE PRO Rosy", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Rosy" },
-  { id: 15, cat: "voopoo", name: "Voopoo VMATE Vthru PRO", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+Vthru+PRO" },
-  { id: 16, cat: "voopoo", name: "Voopoo VMATE i2 Mattee Black", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Mattee+Black" },
-  { id: 17, cat: "voopoo", name: "Voopoo VMATE i2 Neon", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Neon" },
-  { id: 18, cat: "voopoo", name: "Voopoo VMATE i2 Rosy", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Rosy" },
-  { id: 19, cat: "voopoo", name: "Voopoo VMATE i2 Space grey", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Space+grey" },
-  { id: 20, cat: "akkum", name: "18650 Аккамулятор 2500mh", price: 550, img: "https://via.placeholder.com/300x200?text=18650+2500mh" },
-  { id: 21, cat: "akkum", name: "18650 Аккамулятор 3000mh", price: 990, img: "https://via.placeholder.com/300x200?text=18650+3000mh" },
-  { id: 22, cat: "geekvape", name: "Dead Rabit RTA", price: 1990, img: "https://via.placeholder.com/300x200?text=Dead+Rabit+RTA" },
-  { id: 23, cat: "geekvape", name: "GeekVape Aegis Boost 3 Kit", price: 3990, img: "https://via.placeholder.com/300x200?text=Aegis+Boost+3+Kit" },
-  { id: 24, cat: "geekvape", name: "GeekVape Digi Q KIT Mecha Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=Digi+Q+Mecha+Blue" },
-  { id: 25, cat: "geekvape", name: "GeekVape Digi Q KIT Mecha Pink", price: 1990, img: "https://via.placeholder.com/300x200?text=Digi+Q+Mecha+Pink" },
-  { id: 26, cat: "geekvape", name: "GeekVape H45 Crystal Pink", price: 3990, img: "https://via.placeholder.com/300x200?text=H45+Crystal+Pink" },
-  { id: 27, cat: "geekvape", name: "GeekVape Luxury Edition Space Black", price: 2990, img: "https://via.placeholder.com/300x200?text=Luxury+Edition+Space+Black" },
-  { id: 28, cat: "geekvape", name: "GeekVape Wenax Q Mini Gradient Gold", price: 1990, img: "https://via.placeholder.com/300x200?text=Wenax+Q+Mini+Gradient+Gold" },
-  { id: 29, cat: "geekvape", name: "GeekVape Wenax Q Mini Turquoise", price: 1990, img: "https://via.placeholder.com/300x200?text=Wenax+Q+Mini+Turquoise" },
-  { id: 30, cat: "lostmary", name: "LOST MARY MIXER+ Апельсин Клубника", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Апельсин+Клубника" },
-  { id: 31, cat: "lostmary", name: "LOST MARY MIXER+ Арбузные Конфеты", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Арбузные+Конфеты" },
-  { id: 32, cat: "lostmary", name: "LOST MARY MIXER+ Вишня Лимон", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Вишня+Лимон" },
+      { id: "vaporesso", name: "Vaporesso" },
+      { id: "voopoo", name: "Voopoo" },
+      { id: "akkum", name: "Аккумуляторы" },
+      { id: "geekvape", name: "GeekVape" },
+      { id: "lostmary", name: "LOST MARY" },
+      { id: "soak", name: "Soak" },
     ];
 
+    const products = [
+      // Vaporesso
+      { id: 1, cat: "vaporesso", name: "Vaporesso LUXE X PRO White", price: 2990, img: "https://via.placeholder.com/300x200?text=LUXE+X+PRO+White" },
+      { id: 2, cat: "vaporesso", name: "Vaporesso XROS 4 Champange Gold", price: 3990, img: "https://via.placeholder.com/300x200?text=XROS+4+Champange+Gold" },
+      { id: 3, cat: "vaporesso", name: "Vaporesso XROS 4 Green", price: 3990, img: "https://via.placeholder.com/300x200?text=XROS+4+Green" },
+      { id: 4, cat: "vaporesso", name: "Vaporesso XROS 4 MINI Champange Gold", price: 2790, img: "https://via.placeholder.com/300x200?text=XROS+4+MINI+Champange+Gold" },
+      { id: 5, cat: "vaporesso", name: "Vaporesso XROS CUBE Bondi blue", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Bondi+blue" },
+      { id: 6, cat: "vaporesso", name: "Vaporesso XROS CUBE Forest Green", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Forest+Green" },
+      { id: 7, cat: "vaporesso", name: "Vaporesso XROS CUBE Ocean Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Ocean+Blue" },
+      { id: 8, cat: "vaporesso", name: "Vaporesso XROS CUBE Sakura pink", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Sakura+pink" },
+      { id: 9, cat: "vaporesso", name: "Vaporesso XROS PRO Pink", price: 4500, img: "https://via.placeholder.com/300x200?text=XROS+PRO+Pink" },
+
+      // Voopoo
+      { id: 10, cat: "voopoo", name: "Voopoo Argus Pro 2 Pearl White", price: 3990, img: "https://via.placeholder.com/300x200?text=Argus+Pro+2+Pearl+White" },
+      { id: 11, cat: "voopoo", name: "Voopoo Argus Pro 2 Space Grey", price: 3990, img: "https://via.placeholder.com/300x200?text=Argus+Pro+2+Space+Grey" },
+      { id: 12, cat: "voopoo", name: "Voopoo VMATE PRO Dawn Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Dawn+Blue" },
+      { id: 13, cat: "voopoo", name: "Voopoo VMATE PRO Mint Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Mint+Blue" },
+      { id: 14, cat: "voopoo", name: "Voopoo VMATE PRO Rosy", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Rosy" },
+      { id: 15, cat: "voopoo", name: "Voopoo VMATE Vthru PRO", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+Vthru+PRO" },
+      { id: 16, cat: "voopoo", name: "Voopoo VMATE i2 Mattee Black", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Mattee+Black" },
+      { id: 17, cat: "voopoo", name: "Voopoo VMATE i2 Neon", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Neon" },
+      { id: 18, cat: "voopoo", name: "Voopoo VMATE i2 Rosy", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Rosy" },
+      { id: 19, cat: "voopoo", name: "Voopoo VMATE i2 Space grey", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Space+grey" },
+
+      // Аккумуляторы
+      { id: 20, cat: "akkum", name: "18650 Аккамулятор 2500mh", price: 550, img: "https://via.placeholder.com/300x200?text=18650+2500mh" },
+      { id: 21, cat: "akkum", name: "18650 Аккамулятор 3000mh", price: 990, img: "https://via.placeholder.com/300x200?text=18650+3000mh" },
+
+      // GeekVape
+      { id: 22, cat: "geekvape", name: "Dead Rabit RTA", price: 1990, img: "https://via.placeholder.com/300x200?text=Dead+Rabit+RTA" },
+      { id: 23, cat: "geekvape", name: "GeekVape Aegis Boost 3 Kit", price: 3990, img: "https://via.placeholder.com/300x200?text=Aegis+Boost+3+Kit" },
+      { id: 24, cat: "geekvape", name: "GeekVape Digi Q KIT Mecha Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=Digi+Q+Mecha+Blue" },
+      { id: 25, cat: "geekvape", name: "GeekVape Digi Q KIT Mecha Pink", price: 1990, img: "https://via.placeholder.com/300x200?text=Digi+Q+Mecha+Pink" },
+      { id: 26, cat: "geekvape", name: "GeekVape H45 Crystal Pink", price: 3990, img: "https://via.placeholder.com/300x200?text=H45+Crystal+Pink" },
+      { id: 27, cat: "geekvape", name: "GeekVape Luxury Edition Space Black", price: 2990, img: "https://via.placeholder.com/300x200?text=Luxury+Edition+Space+Black" },
+      { id: 28, cat: "geekvape", name: "GeekVape Wenax Q Mini Gradient Gold", price: 1990, img: "https://via.placeholder.com/300x200?text=Wenax+Q+Mini+Gradient+Gold" },
+      { id: 29, cat: "geekvape", name: "GeekVape Wenax Q Mini Turquoise", price: 1990, img: "https://via.placeholder.com/300x200?text=Wenax+Q+Mini+Turquoise" },
+
+      // LOST MARY
+      { id: 30, cat: "lostmary", name: "LOST MARY MIXER+ Апельсин Клубника", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Апельсин+Клубника" },
+      { id: 31, cat: "lostmary", name: "LOST MARY MIXER+ Арбузные Конфеты", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Арбузные+Конфеты" },
+      { id: 32, cat: "lostmary", name: "LOST MARY MIXER+ Вишня Лимон", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Вишня+Лимон" },
+      { id: 33, cat: "lostmary", name: "LOST MARY MIXER+ Грейпфрут Лимон Лайм", price: 2200, img: "https://via.placeholder.com/300x200?text=Грейпфрут+Лимон+Лайм" },
+      { id: 34, cat: "lostmary", name: "LOST MARY MIXER+ Зелёный Чай Лимон Лайм", price: 2200, img: "https://via.placeholder.com/300x200?text=Зелёный+Чай+Лимон+Лайм" },
+      { id: 35, cat: "lostmary", name: "LOST MARY MIXER+ Ледяной Арбуз", price: 2200, img: "https://via.placeholder.com/300x200?text=Ледяной+Арбуз" },
+      { id: 36, cat: "lostmary", name: "LOST MARY MIXER+ Малина Ананас", price: 2200, img: "https://via.placeholder.com/300x200?text=Малина+Ананас" },
+      { id: 37, cat: "lostmary", name: "LOST MARY MIXER+ Микс Мята", price: 2200, img: "https://via.placeholder.com/300x200?text=Микс+Мята" },
+      { id: 38, cat: "lostmary", name: "LOST MARY MIXER+ Черника Арбуз", price: 2200, img: "https://via.placeholder.com/300x200?text=Черника+Арбуз" },
+      { id: 39, cat: "lostmary", name: "LOST MARY MIXER+ Черника Малина Лёд", price: 2200, img: "https://via.placeholder.com/300x200?text=Черника+Малина+Лёд" },
+      { id: 40, cat: "lostmary", name: "LOST MARY MIXER+ Черника Малина Роза", price: 2200, img: "https://via.placeholder.com/300x200?text=Черника+Малина+Роза" },
+      { id: 41, cat: "lostmary", name: "LOST MARY MIXER+ Яблок Виноград", price: 2200, img: "https://via.placeholder.com/300x200?text=Яблок+Виноград" },
+      { id: 42, cat: "lostmary", name: "LOST MARY MIXER+ Яблочные Леденцы", price: 2200, img: "https://via.placeholder.com/300x200?text=Яблочные+Леденцы" },
+      { id: 43, cat: "lostmary", name: "Lost Mary BM16000 Перечная мята", price: 2200, img: "https://via.placeholder.com/300x200?text=BM16000+Перечная+мята" },
+      { id: 44, cat: "lostmary", name: "Lost Mary MO10000 Зелёное Манго", price: 2200, img: "https://via.placeholder.com/300x200?text=MO10000+Зелёное+Манго" },
+      { id: 45, cat: "lostmary", name: "Lost Mary MO10000 Смешанные Сливы", price: 2200, img: "https://via.placeholder.com/300x200?text=MO10000+Смешанные+Сливы" },
+      { id: 46, cat: "lostmary", name: "Lost Mary MO20000 PRO Двойное яблоко", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Двойное+яблоко" },
+      { id: 47, cat: "lostmary", name: "Lost Mary MO20000 PRO Жасмин малина", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Жасмин+малина" },
+      { id: 48, cat: "lostmary", name: "Lost Mary MO20000 PRO Зелёное Яблоко Байя Всплеск", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Зелёное+Яблоко+Байя+Всплеск" },
+      { id: 49, cat: "lostmary", name: "Lost Mary MO20000 PRO Ледяная мята", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Ледяная+мята" },
+
+      // Soak
+      { id: 50, cat: "soak", name: "Soak 4000 Айва Кардамон", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+4000+Айва+Кардамон" },
+      { id: 51, cat: "soak", name: "Soak 4000 Арахисовый Батончик", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+4000+Арахисовый+Батончик" },
+      { id: 52, cat: "soak", name: "Soak 4000 Кумкват", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+4000+Кумкват" },
+      { id: 53, cat: "soak", name: "Soak 6000 Гималайский черный чай", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+6000+Гималайский+черный+чай" },
+      { id: 54, cat: "soak", name: "Soak 6000 Облепиховый чай", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+6000+Облепиховый+чай" }
+    ];
 
     let cart = [];
 
@@ -214,3 +245,4 @@
   </script>
 </body>
 </html>
+
