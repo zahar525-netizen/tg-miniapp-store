@@ -523,5 +523,51 @@ products.push(
     { name: "Койла FUSED 0.6", price: 200 },
     { name: "Койла FUSED 0.85", price: 200 }
 );
+<script>
+function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = ''; // очищаем на всякий случай
+    products.forEach((product, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <h3>${product.name}</h3>
+            <p>Цена: ${product.price} ₽</p>
+            <button onclick="addToCart(${index})">В корзину</button>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function addToCart(index) {
+    cart.push(products[index]);
+    updateCart();
+    alert(products[index].name + ' добавлен в корзину!');
+}
+
+function updateCart() {
+    const cartDiv = document.getElementById('cartItems');
+    cartDiv.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = `${item.name} — ${item.price} ₽`;
+        cartDiv.appendChild(div);
+        total += item.price;
+    });
+    document.getElementById('cartTotal').textContent = total;
+}
+
+function openCart() {
+    document.getElementById('cartModal').style.display = 'flex';
+}
+
+function closeCart() {
+    document.getElementById('cartModal').style.display = 'none';
+}
+
+// запускаем рендер товаров при загрузке страницы
+renderProducts();
 </script>
+
 
