@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Магазин мини-апп</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      background: #f9f9fb;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      background: white;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+    }
+    header button {
+      flex-shrink: 0;
+      background: #f1f1f1;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    header button.active {
+      background: #007aff;
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: 0.2s;
+    }
+    .card img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+    }
+    .card .info {
+      padding: 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .name {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .price {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .card button {
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: white;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer button {
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header id="categories"></header>
+  <main><div id="productGrid" class="grid"></div></main>
+  <footer>
+    <span id="cartCount">Корзина пуста</span>
+    <button onclick="openCart()">Открыть корзину</button>
+  </footer>
+
+  <script>
+    const categories = [
+      { id: "veniki", name: "Веники" },
+      { id: "aks", name: "Аксессуары" },
+      { id: "aroma", name: "Ароматы" },
+    ];
+
+    const products = [
+      { id: 1, cat: "veniki", name: "Веник дубовый", price: 300, img: "https://via.placeholder.com/300x200?text=Веник+дубовый" },
+      { id: 2, cat: "veniki", name: "Веник берёзовый", price: 280, img: "https://via.placeholder.com/300x200?text=Веник+березовый" },
+      { id: 3, cat: "aks", name: "Шапка банная", price: 450, img: "https://via.placeholder.com/300x200?text=Шапка+банная" },
+      { id: 4, cat: "aroma", name: "Эвкалиптовое масло", price: 150, img: "https://via.placeholder.com/300x200?text=Эвкалипт" },
+    ];
+
+    let cart = [];
+
+    const catContainer = document.getElementById("categories");
+    const grid = document.getElementById("productGrid");
+    const cartCount = document.getElementById("cartCount");
+
+    function renderCategories() {
+      categories.forEach((c, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = c.name;
+        if (i === 0) btn.classList.add("active");
+        btn.onclick = () => {
+          document.querySelectorAll("header button").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          renderProducts(c.id);
+        };
+        catContainer.appendChild(btn);
+      });
+    }
+
+    function renderProducts(cat) {
+      grid.innerHTML = "";
+      products.filter(p => p.cat === cat).forEach(p => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <div class="info">
+            <div class="name">${p.name}</div>
+            <div class="price">${p.price} ₽</div>
+            <button onclick="addToCart(${p.id})">В корзину</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      cart.push(product);
+      cartCount.textContent = `В корзине: ${cart.length}`;
+    }
+
+    function openCart() {
+      alert(cart.length ? cart.map(p => `${p.name} — ${p.price}₽`).join("\n") : "Корзина пуста");
+    }
+
+    renderCategories();
+    renderProducts(categories[0].id);
+  </script>
+</body>
+</html>
