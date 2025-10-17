@@ -1,248 +1,527 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Магазин мини-апп</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 0;
-      background: #f9f9fb;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-    header {
-      background: white;
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      position: sticky;
-      top: 0;
-    }
-    header button {
-      flex-shrink: 0;
-      background: #f1f1f1;
-      border: none;
-      border-radius: 20px;
-      padding: 8px 14px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    header button.active {
-      background: #007aff;
-      color: white;
-    }
-
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
-    .card {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transition: 0.2s;
-    }
-    .card img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-    }
-    .card .info {
-      padding: 10px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .name {
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-    .price {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    .card button {
-      background: #007aff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 8px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    footer {
-      background: white;
-      border-top: 1px solid #ddd;
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    footer button {
-      background: #007aff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini App Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        header {
+            background: #1e90ff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
+        .product-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .product-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        .product-card p {
+            margin: 5px 0;
+        }
+        .product-card button {
+            background: #1e90ff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product-card button:hover {
+            background: #0f78d1;
+        }
+        /* Модальное окно корзины */
+        #cartModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #cartModal .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+        }
+    </style>
 </head>
 <body>
-  <header id="categories"></header>
-  <main><div id="productGrid" class="grid"></div></main>
-  <footer>
-    <span id="cartCount">Корзина пуста</span>
-    <button onclick="openCart()">Открыть корзину</button>
-  </footer>
 
-  <script>
-    const categories = [
-      { id: "vaporesso", name: "Vaporesso" },
-      { id: "voopoo", name: "Voopoo" },
-      { id: "akkum", name: "Аккумуляторы" },
-      { id: "geekvape", name: "GeekVape" },
-      { id: "lostmary", name: "LOST MARY" },
-      { id: "soak", name: "Soak" },
-    ];
+<header>
+    Mini App Store
+    <button onclick="openCart()" style="float:right; padding:5px 10px; margin-top:-5px;">Корзина</button>
+</header>
 
-    const products = [
-      // Vaporesso
-      { id: 1, cat: "vaporesso", name: "Vaporesso LUXE X PRO White", price: 2990, img: "https://via.placeholder.com/300x200?text=LUXE+X+PRO+White" },
-      { id: 2, cat: "vaporesso", name: "Vaporesso XROS 4 Champange Gold", price: 3990, img: "https://via.placeholder.com/300x200?text=XROS+4+Champange+Gold" },
-      { id: 3, cat: "vaporesso", name: "Vaporesso XROS 4 Green", price: 3990, img: "https://via.placeholder.com/300x200?text=XROS+4+Green" },
-      { id: 4, cat: "vaporesso", name: "Vaporesso XROS 4 MINI Champange Gold", price: 2790, img: "https://via.placeholder.com/300x200?text=XROS+4+MINI+Champange+Gold" },
-      { id: 5, cat: "vaporesso", name: "Vaporesso XROS CUBE Bondi blue", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Bondi+blue" },
-      { id: 6, cat: "vaporesso", name: "Vaporesso XROS CUBE Forest Green", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Forest+Green" },
-      { id: 7, cat: "vaporesso", name: "Vaporesso XROS CUBE Ocean Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Ocean+Blue" },
-      { id: 8, cat: "vaporesso", name: "Vaporesso XROS CUBE Sakura pink", price: 1990, img: "https://via.placeholder.com/300x200?text=XROS+CUBE+Sakura+pink" },
-      { id: 9, cat: "vaporesso", name: "Vaporesso XROS PRO Pink", price: 4500, img: "https://via.placeholder.com/300x200?text=XROS+PRO+Pink" },
+<div class="product-grid" id="productGrid">
+    <!-- Товары будут рендериться сюда через JS -->
+</div>
 
-      // Voopoo
-      { id: 10, cat: "voopoo", name: "Voopoo Argus Pro 2 Pearl White", price: 3990, img: "https://via.placeholder.com/300x200?text=Argus+Pro+2+Pearl+White" },
-      { id: 11, cat: "voopoo", name: "Voopoo Argus Pro 2 Space Grey", price: 3990, img: "https://via.placeholder.com/300x200?text=Argus+Pro+2+Space+Grey" },
-      { id: 12, cat: "voopoo", name: "Voopoo VMATE PRO Dawn Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Dawn+Blue" },
-      { id: 13, cat: "voopoo", name: "Voopoo VMATE PRO Mint Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Mint+Blue" },
-      { id: 14, cat: "voopoo", name: "Voopoo VMATE PRO Rosy", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+PRO+Rosy" },
-      { id: 15, cat: "voopoo", name: "Voopoo VMATE Vthru PRO", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+Vthru+PRO" },
-      { id: 16, cat: "voopoo", name: "Voopoo VMATE i2 Mattee Black", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Mattee+Black" },
-      { id: 17, cat: "voopoo", name: "Voopoo VMATE i2 Neon", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Neon" },
-      { id: 18, cat: "voopoo", name: "Voopoo VMATE i2 Rosy", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Rosy" },
-      { id: 19, cat: "voopoo", name: "Voopoo VMATE i2 Space grey", price: 1990, img: "https://via.placeholder.com/300x200?text=VMATE+i2+Space+grey" },
+<div id="cartModal">
+    <div class="modal-content">
+        <h2>Корзина</h2>
+        <div id="cartItems"></div>
+        <p>Итого: <span id="cartTotal">0</span> ₽</p>
+        <button onclick="closeCart()">Закрыть</button>
+    </div>
+</div>
 
-      // Аккумуляторы
-      { id: 20, cat: "akkum", name: "18650 Аккамулятор 2500mh", price: 550, img: "https://via.placeholder.com/300x200?text=18650+2500mh" },
-      { id: 21, cat: "akkum", name: "18650 Аккамулятор 3000mh", price: 990, img: "https://via.placeholder.com/300x200?text=18650+3000mh" },
+<script>
+    const cart = [];
+</script>
+<script>
+const products = [
+    // Vaporesso
+    { name: "Vaporesso LUXE X PRO White", price: 2990 },
+    { name: "Vaporesso XROS 4 Champange Gold", price: 3990 },
+    { name: "Vaporesso XROS 4 Green", price: 3990 },
+    { name: "Vaporesso XROS 4 MINI Champange Gold", price: 2790 },
+    { name: "Vaporesso XROS CUBE Bondi blue", price: 1990 },
+    { name: "Vaporesso XROS CUBE Forest Green", price: 1990 },
+    { name: "Vaporesso XROS CUBE Ocean Blue", price: 1990 },
+    { name: "Vaporesso XROS CUBE Sakura pink", price: 1990 },
+    { name: "Vaporesso XROS PRO Pink", price: 4500 },
+    // Voopoo
+    { name: "Voopoo Argus Pro 2 Pearl White", price: 3990 },
+    { name: "Voopoo Argus Pro 2 Space Grey", price: 3990 },
+    { name: "Voopoo VMATE PRO Dawn Blue", price: 1990 },
+    { name: "Voopoo VMATE PRO Mint Blue", price: 1990 },
+    { name: "Voopoo VMATE PRO Rosy", price: 1990 },
+    { name: "Voopoo VMATE Vthru PRO", price: 1990 },
+    { name: "Voopoo VMATE i2 Mattee Black", price: 1990 },
+    { name: "Voopoo VMATE i2 Neon", price: 1990 },
+    { name: "Voopoo VMATE i2 Rosy", price: 1990 },
+    { name: "Voopoo VMATE i2 Space grey", price: 1990 },
+    // Аккумуляторы и аксессуары
+    { name: "18650 Аккамулятор 2500mh", price: 550 },
+    { name: "18650 Аккамулятор 3000mh", price: 990 },
+    { name: "Dead Rabit RTA", price: 1990 },
+    { name: "GeekVape Aegis Boost 3 Kit", price: 3990 },
+    { name: "GeekVape Digi Q KIT Mecha Blue", price: 1990 },
+    { name: "GeekVape Digi Q KIT Mecha Pink", price: 1990 },
+    { name: "GeekVape H45 Crystal Pink", price: 3990 },
+    { name: "GeekVape Luxury Edition Space Black", price: 2990 },
+    { name: "GeekVape Wenax Q Mini Gradient Gold", price: 1990 },
+    { name: "GeekVape Wenax Q Mini Turquoise", price: 1990 }
+];
+</script>
+<script>
+// Продолжение массива products
+products.push(
+    // LOST MARY MIXER+
+    { name: "LOST MARY MIXER+ Апельсин Клубника", price: 2200 },
+    { name: "LOST MARY MIXER+ Арбузные Конфеты", price: 2200 },
+    { name: "LOST MARY MIXER+ Вишня Лимон", price: 2200 },
+    { name: "LOST MARY MIXER+ Грейпфрут Лимон Лайм", price: 2200 },
+    { name: "LOST MARY MIXER+ Зелёный Чай Лимон Лайм", price: 2200 },
+    { name: "LOST MARY MIXER+ Ледяной Арбуз", price: 2200 },
+    { name: "LOST MARY MIXER+ Малина Ананас", price: 2200 },
+    { name: "LOST MARY MIXER+ Микс Мята", price: 2200 },
+    { name: "LOST MARY MIXER+ Черника Арбуз", price: 2200 },
+    { name: "LOST MARY MIXER+ Черника Малина Лёд", price: 2200 },
+    { name: "LOST MARY MIXER+ Черника Малина Роза", price: 2200 },
+    { name: "LOST MARY MIXER+ Яблок Виноград", price: 2200 },
+    { name: "LOST MARY MIXER+ Яблочные Леденцы", price: 2200 },
+    // Lost Mary BM / MO
+    { name: "Lost Mary BM16000 Перечная мята", price: 2200 },
+    { name: "Lost Mary MO10000 Зелёное Манго", price: 2200 },
+    { name: "Lost Mary MO10000 Смешанные Сливы", price: 2200 },
+    { name: "Lost Mary MO20000 PRO Двойное яблоко", price: 2200 },
+    { name: "Lost Mary MO20000 PRO Жасмин малина", price: 2200 },
+    { name: "Lost Mary MO20000 PRO Зелёное Яблоко Байя Всплеск", price: 2200 },
+    { name: "Lost Mary MO20000 PRO Ледяная мята", price: 2200 },
+    // Rincoe
+    { name: "Rincoe Manto AIO PLUS Cyan Blue", price: 2990 },
+    // Soak
+    { name: "Soak 4000 Айва Кардамон", price: 2200 },
+    { name: "Soak 4000 Арахисовый Батончик", price: 2200 },
+    { name: "Soak 4000 Кумкват", price: 2200 },
+    { name: "Soak 6000 Гималайский черный чай", price: 2200 },
+    { name: "Soak 6000 Облепиховый чай", price: 2200 }
+);
+</script>
+<script>
+// Продолжение массива products
+products.push(
+    // Жидкость BLAZE
+    { name: "Жидкость BLAZE Гранатовый лимонад", price: 2200 },
+    { name: "Жидкость BLAZE Дыня персик груша", price: 2200 },
+    { name: "Жидкость BLAZE Клубника банан жевачка", price: 2200 },
+    { name: "Жидкость BLAZE Малина арбуз конфеты", price: 2200 },
+    { name: "Жидкость BLAZE Малина виноград", price: 2200 },
+    { name: "Жидкость BLAZE Манго апельсин", price: 2200 },
+    { name: "Жидкость BLAZE Яблоко драгонфрут", price: 2200 },
+    // Жидкость BRYZGI
+    { name: "Жидкость BRYZGI Ананас", price: 2200 },
+    { name: "Жидкость BRYZGI Апельсин ананас", price: 2200 },
+    { name: "Жидкость BRYZGI Апельсин манго", price: 2200 },
+    { name: "Жидкость BRYZGI Апельсин яблоко личи", price: 2200 },
+    { name: "Жидкость BRYZGI Апельсиновый бубль-гум", price: 2200 },
+    { name: "Жидкость BRYZGI Банан личи", price: 2200 },
+    { name: "Жидкость BRYZGI Банан черника", price: 2200 },
+    { name: "Жидкость BRYZGI Барбарис", price: 2200 },
+    { name: "Жидкость BRYZGI Брусника киви", price: 2200 },
+    { name: "Жидкость BRYZGI Бубль-гум", price: 2200 },
+    { name: "Жидкость BRYZGI Буратино", price: 2200 },
+    { name: "Жидкость BRYZGI Гранат личи", price: 2200 },
+    { name: "Жидкость BRYZGI Грейпфрут смородина", price: 2200 },
+    { name: "Жидкость BRYZGI Грепфрут ананас", price: 2200 },
+    { name: "Жидкость BRYZGI Груша", price: 2200 },
+    { name: "Жидкость BRYZGI Кактус клубника", price: 2200 },
+    { name: "Жидкость BRYZGI Кактус лайм", price: 2200 },
+    { name: "Жидкость BRYZGI Клубника манго", price: 2200 },
+    { name: "Жидкость BRYZGI Клубника хвоя", price: 2200 },
+    { name: "Жидкость BRYZGI Клюква гранат", price: 2200 },
+    { name: "Жидкость BRYZGI Клюква лайм", price: 2200 },
+    { name: "Жидкость BRYZGI Крем-сода", price: 2200 },
+    { name: "Жидкость BRYZGI Лимон лайм", price: 2200 },
+    { name: "Жидкость BRYZGI Малина клюква", price: 2200 },
+    { name: "Жидкость BRYZGI Малина личи", price: 2200 },
+    { name: "Жидкость BRYZGI Малина персик", price: 2200 },
+    { name: "Жидкость BRYZGI Малина хвоя", price: 2200 },
+    { name: "Жидкость BRYZGI Малина яблоко", price: 2200 },
+    { name: "Жидкость BRYZGI Манго абрикос", price: 2200 },
+    { name: "Жидкость BRYZGI Манго ананас малина", price: 2200 },
+    { name: "Жидкость BRYZGI Персик апелсин", price: 2200 },
+    { name: "Жидкость BRYZGI Персик груша", price: 2200 },
+    { name: "Жидкость BRYZGI Пина колада", price: 2200 },
+    { name: "Жидкость BRYZGI Помело", price: 2200 },
+    { name: "Жидкость BRYZGI Розовый лимонад", price: 2200 },
+    { name: "Жидкость BRYZGI Сангрия", price: 2200 },
+    { name: "Жидкость BRYZGI Сочной гранат", price: 2200 },
+    { name: "Жидкость BRYZGI Таёжные ягоды", price: 2200 },
+    { name: "Жидкость BRYZGI Таёжный лимонад", price: 2200 },
+    { name: "Жидкость BRYZGI Холодный чай с лимоном", price: 2200 },
+    { name: "Жидкость BRYZGI Цитрус гуава", price: 2200 },
+    { name: "Жидкость BRYZGI Яблоко клубника", price: 2200 },
+    { name: "Жидкость BRYZGI Яблочный джекфрут", price: 2200 },
+    // Жидкость Barrel
+    { name: "Жидкость Barrel 30ml 29", price: 2200 },
+    { name: "Жидкость Barrel 30ml 3", price: 2200 },
+    { name: "Жидкость Barrel 60ml 29", price: 2200 },
+    { name: "Жидкость Barrel 60ml 3", price: 2200 }
+);
+</script>
+<script>
+// Продолжение массива products
+products.push(
+    // Жидкость Boom
+    { name: "Жидкость Boom Ледяная облепиха", price: 2200 },
+    { name: "Жидкость Boom Ледяной гранат", price: 2200 },
+    { name: "Жидкость Boom Ледяной нектарин", price: 2200 },
+    { name: "Жидкость Boom Ледяной персик", price: 2200 },
+    // Жидкость COBRA
+    { name: "Жидкость COBRA Bourbon tobacco", price: 2200 },
+    { name: "Жидкость COBRA Coconut tobacco", price: 2200 },
+    { name: "Жидкость COBRA Coffee tobacco", price: 2200 },
+    { name: "Жидкость COBRA Ryq gold", price: 2200 },
+    { name: "Жидкость COBRA Tobacco lemon", price: 2200 },
+    { name: "Жидкость COBRA Virginia", price: 2200 },
+    // Жидкость CULT
+    { name: "Жидкость CULT Апероль с малиной", price: 2200 },
+    { name: "Жидкость CULT Виноградная кола со льдом", price: 2200 },
+    { name: "Жидкость CULT Вишневая кола", price: 2200 },
+    { name: "Жидкость CULT Крем-сода манго", price: 2200 },
+    { name: "Жидкость CULT Малиновый лимонад", price: 2200 },
+    { name: "Жидкость CULT Мохито с личи", price: 2200 },
+    { name: "Жидкость CULT Фанта с маракуйей", price: 2200 },
+    // Жидкость ICE PARADICE
+    { name: "Жидкость ICE PARADICE Алоэ личи", price: 2200 },
+    { name: "Жидкость ICE PARADICE Ананас", price: 2200 },
+    { name: "Жидкость ICE PARADICE Ананас лайм", price: 2200 },
+    { name: "Жидкость ICE PARADICE Арбуз гранат черника", price: 2200 },
+    { name: "Жидкость ICE PARADICE Банан дыня", price: 2200 },
+    { name: "Жидкость ICE PARADICE Какос черника", price: 2200 },
+    { name: "Жидкость ICE PARADICE Кислое зелёное яблоко", price: 2200 },
+    { name: "Жидкость ICE PARADICE Клубника виноград", price: 2200 },
+    { name: "Жидкость ICE PARADICE Клубника киви", price: 2200 },
+    { name: "Жидкость ICE PARADICE Кола лимон", price: 2200 },
+    { name: "Жидкость ICE PARADICE Манго апельсин", price: 2200 },
+    { name: "Жидкость ICE PARADICE Манго лайм", price: 2200 },
+    { name: "Жидкость ICE PARADICE Манго личи", price: 2200 },
+    { name: "Жидкость ICE PARADICE Тропический бриз", price: 2200 },
+    { name: "Жидкость ICE PARADICE Черная красная смородина", price: 2200 }
+);
+</script>
+<script>
+// Продолжение массива products
+products.push(
+    // Жидкость ICED OUT
+    { name: "Жидкость ICED OUT Личи голубика", price: 2200 },
+    { name: "Жидкость ICED OUT Энергетик с клюквой", price: 2200 },
+    // Жидкость MAX FLAVOR
+    { name: "Жидкость MAX FLAVOR Банан клубника", price: 2200 },
+    { name: "Жидкость MAX FLAVOR Виноград с алоэ", price: 2200 },
+    { name: "Жидкость MAX FLAVOR Клубника", price: 2200 },
+    { name: "Жидкость MAX FLAVOR Лимонад клубника базелик", price: 2200 },
+    { name: "Жидкость MAX FLAVOR Роза с жасмином", price: 2200 },
+    { name: "Жидкость MAX FLAVOR Ягодный йогурт", price: 2200 },
+    // Жидкость OVERMUCH Strong
+    { name: "Жидкость OVERMUCH Strong Вишня черника", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Дыня клубника", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Ежевика гранат", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Зелёное яблоко", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Киви лайм", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Клубника киви", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Малина личи", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Малина черника", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Манго маракуйя", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Маракуйя", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Мармеладные мишки", price: 100 },
+    { name: "Жидкость OVERMUCH Strong Розовый лимонад", price: 100 },
+    // Жидкость OVERMUCH
+    { name: "Жидкость OVERMUCH Ананас Арбуз", price: 100 },
+    { name: "Жидкость OVERMUCH Вишня черника", price: 100 },
+    { name: "Жидкость OVERMUCH Грейпфрут смородина", price: 100 },
+    { name: "Жидкость OVERMUCH Дыня клубника", price: 100 },
+    { name: "Жидкость OVERMUCH Киви лайм кислое", price: 100 },
+    { name: "Жидкость OVERMUCH Клубника киви", price: 100 },
+    { name: "Жидкость OVERMUCH Малина черника", price: 100 },
+    { name: "Жидкость OVERMUCH Манго маракуя", price: 100 },
+    { name: "Жидкость OVERMUCH Маракуйя", price: 100 },
+    { name: "Жидкость OVERMUCH Мармеладные мишки", price: 100 },
+    { name: "Жидкость OVERMUCH Персик апельсин", price: 100 },
+    // Жидкость PODONKI
+    { name: "Жидкость PODONKI Арбузное мороженое", price: 2200 },
+    { name: "Жидкость PODONKI Гранатовый смузи", price: 2200 },
+    { name: "Жидкость PODONKI Тархун с киви и лаймом", price: 2200 },
+    { name: "Жидкость PODONKI Черная смородина лимон", price: 2200 },
+    // Жидкость Raizin
+    { name: "Жидкость Raizin Кактусовый лимонад", price: 2200 },
+    // Жидкость Rell Azure
+    { name: "Жидкость Rell Azure Абрикосовый лимонад", price: 2200 },
+    { name: "Жидкость Rell Azure Ананас", price: 2200 },
+    { name: "Жидкость Rell Azure Ананас маракуйя клюква", price: 2200 },
+    { name: "Жидкость Rell Azure Дыня арбуз", price: 2200 },
+    { name: "Жидкость Rell Azure Киви", price: 2200 },
+    { name: "Жидкость Rell Azure Киви гуава маракуйя", price: 2200 },
+    { name: "Жидкость Rell Azure Кислое зелёное яблоко", price: 2200 },
+    { name: "Жидкость Rell Azure Кислое манго и мармелад", price: 2200 },
+    { name: "Жидкость Rell Azure Кислое яблоко и ежевика", price: 2200 },
+    { name: "Жидкость Rell Azure Красное яблоко лимон", price: 2200 },
+    { name: "Жидкость Rell Azure Лимон мята", price: 2200 },
+    { name: "Жидкость Rell Azure Манго", price: 2200 },
+    { name: "Жидкость Rell Azure Манго гуава", price: 2200 },
+    { name: "Жидкость Rell Azure Манго черника виноград", price: 2200 },
+    { name: "Жидкость Rell Azure Мангустин грейпфгут", price: 2200 },
+    { name: "Жидкость Rell Azure Никтарин манго арбуз", price: 2200 },
+    { name: "Жидкость Rell Azure Персик", price: 2200 },
+    { name: "Жидкость Rell Azure Черника лимон", price: 2200 },
+    { name: "Жидкость Rell Azure Энергетик", price: 2200 },
+    { name: "Жидкость Rell Azure Яблоко персик", price: 2200 }
+);
+</script>
+<script>
+// Продолжение массива products
+products.push(
+    // Жидкость Rell Green
+    { name: "Жидкость Rell Green Ананас лимон", price: 2200 },
+    { name: "Жидкость Rell Green Ананасовый сок", price: 2200 },
+    { name: "Жидкость Rell Green Греёпфрут", price: 2200 },
+    { name: "Жидкость Rell Green Кислые леденцы", price: 2200 },
+    { name: "Жидкость Rell Green Кола", price: 2200 },
+    { name: "Жидкость Rell Green Личи ягода", price: 2200 },
+    { name: "Жидкость Rell Green Маракуйя цитрус", price: 2200 },
+    { name: "Жидкость Rell Green Морозная перечная мята", price: 2200 },
+    { name: "Жидкость Rell Green Морозные ягоды", price: 2200 },
+    { name: "Жидкость Rell Green Яблочный сок", price: 2200 },
+    { name: "Жидкость Rell Green Ягодный сок", price: 2200 },
+    // Жидкость Rell Grey
+    { name: "Жидкость Rell Grey Киви", price: 2200 },
+    { name: "Жидкость Rell Grey Кислые яблочные червячки", price: 2200 },
+    { name: "Жидкость Rell Grey Клубника арбуз", price: 2200 },
+    { name: "Жидкость Rell Grey Клубника банан", price: 2200 },
+    { name: "Жидкость Rell Grey Клубника яблоко арбуз", price: 2200 },
+    { name: "Жидкость Rell Grey Красный сицилийский апельсин", price: 2200 },
+    { name: "Жидкость Rell Grey Лемон кислый киви кактус", price: 2200 },
+    { name: "Жидкость Rell Grey Лимон персик", price: 2200 },
+    { name: "Жидкость Rell Grey Медовый манго", price: 2200 },
+    { name: "Жидкость Rell Grey Мятный лимонад", price: 2200 },
+    { name: "Жидкость Rell Grey Свежая перечная мята", price: 2200 },
+    { name: "Жидкость Rell Grey Сочный виноград", price: 2200 },
+    { name: "Жидкость Rell Grey Трописеский микс с клюквой", price: 2200 },
+    { name: "Жидкость Rell Grey Фреш Арбуз дыня", price: 2200 },
+    { name: "Жидкость Rell Grey Черника", price: 2200 },
+    { name: "Жидкость Rell Grey Энергетик", price: 2200 },
+    { name: "Жидкость Rell Grey Ягодная жвачка", price: 2200 },
+    // Жидкость Rell Orange
+    { name: "Жидкость Rell Orange Алое клубника киви", price: 2200 },
+    { name: "Жидкость Rell Orange Арабские пряности и сухофрукты", price: 2200 },
+    { name: "Жидкость Rell Orange Вишня мармелад", price: 2200 },
+    { name: "Жидкость Rell Orange Гранат малина", price: 2200 },
+    { name: "Жидкость Rell Orange Киви кактус алоэ", price: 2200 },
+    { name: "Жидкость Rell Orange Клубника", price: 2200 },
+    { name: "Жидкость Rell Orange Клубника банан", price: 2200 },
+    { name: "Жидкость Rell Orange Клубника черника", price: 2200 },
+    { name: "Жидкость Rell Orange Клубнично-арбузный фреш", price: 2200 },
+    { name: "Жидкость Rell Orange Лайм клубника", price: 2200 },
+    { name: "Жидкость Rell Orange Лесные травы и ягоды", price: 2200 },
+    { name: "Жидкость Rell Orange Лимон мормелад", price: 2200 },
+    { name: "Жидкость Rell Orange Лимонад из малины и черники", price: 2200 },
+    { name: "Жидкость Rell Orange Малина арбуз", price: 2200 },
+    { name: "Жидкость Rell Orange Микс ягод", price: 2200 },
+    { name: "Жидкость Rell Orange Тропическая гуава и малина", price: 2200 },
+    { name: "Жидкость Rell Orange Цитрус Клюква", price: 2200 },
+    { name: "Жидкость Rell Orange Чай со смородной", price: 2200 },
+    { name: "Жидкость Rell Orange Черника с холодком", price: 2200 },
+    { name: "Жидкость Rell Orange Яблоко груша", price: 2200 },
+    { name: "Жидкость Rell Orange Ягоды и сладкая мята", price: 2200 },
+    // Жидкость Rell White
+    { name: "Жидкость Rell White Ананас персик манго", price: 2200 },
+    { name: "Жидкость Rell White Банан манго", price: 2200 },
+    { name: "Жидкость Rell White Вишнёвый лимонад", price: 2200 },
+    { name: "Жидкость Rell White Жасмин малина", price: 2200 },
+    { name: "Жидкость Rell White Личи Черника", price: 2200 },
+    { name: "Жидкость Rell White Манго ананас", price: 2200 },
+    { name: "Жидкость Rell White Манго маракуя", price: 2200 },
+    { name: "Жидкость Rell White Маракуя", price: 2200 },
+    { name: "Жидкость Rell White Персик ананас", price: 2200 },
+    { name: "Жидкость Rell White Персик грейпфрут", price: 2200 },
+    { name: "Жидкость Rell White Персик груша", price: 2200 },
+    { name: "Жидкость Rell White Персик и ягоды", price: 2200 },
+    { name: "Жидкость Rell White Персик манго", price: 2200 },
+    { name: "Жидкость Rell White Черничные конфеты", price: 2200 },
+    { name: "Жидкость Rell White Яблоко виноград груша", price: 2200 },
+    { name: "Жидкость Rell White Яблоко груша", price: 2200 },
+    { name: "Жидкость Rell White Яблоко персик груша", price: 2200 },
+    { name: "Жидкость Rell White Ягодные конфеты", price: 2200 },
+    // Жидкость SHOCK
+    { name: "Жидкость SHOCK Клубника", price: 2200 },
+    { name: "Жидкость SHOCK Мармелад", price: 2200 },
+    // Жидкость SafeLiq
+    { name: "Жидкость SafeLiq Ананас", price: 2200 },
+    { name: "Жидкость SafeLiq Барбарис", price: 2200 },
+    { name: "Жидкость SafeLiq Зелёное яблоко", price: 2200 },
+    { name: "Жидкость SafeLiq Манго", price: 2200 },
+    { name: "Жидкость SafeLiq Французкая трубка", price: 2200 },
+    // Жидкость TOP
+    { name: "Жидкость TOP Гранат ментол", price: 2200 },
+    { name: "Жидкость TOP Грейпфрут ментол", price: 2200 },
+    { name: "Жидкость TOP Дыня ментол", price: 2200 },
+    { name: "Жидкость TOP Яблоко ментол", price: 2200 },
+    // Жидкость Vandal
+    { name: "Жидкость Vandal Вишня", price: 2200 },
+    { name: "Жидкость Vandal Вишня Зкстра", price: 2200 },
+    { name: "Жидкость Vandal Кактус", price: 2200 },
+    { name: "Жидкость Vandal Кактус Экстра", price: 2200 },
+    { name: "Жидкость Vandal Черёмуха Экстра", price: 2200 },
+    // Жидкость Zombie Juices
+    { name: "Жидкость Zombie Juices Ананас", price: 2200 },
+    { name: "Жидкость Zombie Juices Киви", price: 2200 },
+    { name: "Жидкость Zombie Juices Скитлс", price: 2200 },
+    // Жидкость АНАРХИЯ
+    { name: "Жидкость АНАРХИЯ Бабл гам арбуз", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Вишневая косточка с ноками колы", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Дынное мороженое", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Зелёное яблоко", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Клубничный заворной крем", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Кола сода айс", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Компот из персиков", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Лимонно-лаймовая кола", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Лимонный мармелад", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Пшеничное печенье с ванильным кремом", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Радужный щербет", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Сладкая клубника со сливками", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Сок из ошметков манго клубники персика", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Сочный личи с белым персиком", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Холодная сладкая мята", price: 2200 },
+    { name: "Жидкость АНАРХИЯ Чизкейк с апельсиновым и баварским кремом", price: 2200 },
+    // Испарители
+    { name: "Испаритель BRUSKO SPL 10", price: 200 },
+    { name: "Испаритель Eleaf GX COIL", price: 200 },
+    { name: "Испаритель GEEKVAPE B0.2", price: 390 },
+    { name: "Испаритель GEEKVAPE B0.3", price: 390 },
+    { name: "Испаритель GEEKVAPE B0.6", price: 390 },
+    { name: "Испаритель GEEKVAPE P0.2", price: 450 },
+    { name: "Испаритель HELLVAPE 0.8", price: 200 },
+    { name: "Испаритель JELLYBOX NANO COIL 0.5", price: 390 },
+    { name: "Испаритель JELLYBOX NANO COIL 1.0", price: 390 },
+    { name: "Испаритель MANTO AIO COIL 0.3", price: 390 },
+    { name: "Испаритель SMOK LP1 0.8", price: 390 },
+    { name: "Испаритель SMOK LP1 1.2", price: 390 },
+    { name: "Испаритель SMOK NORD 0.6", price: 390 },
+    { name: "Испаритель SMOK RPM 2 0.16", price: 390 },
+    { name: "Испаритель SMOK RPM 2 0.25", price: 390 },
+    { name: "Испаритель SMOK RPM 2 0.6", price: 390 },
+    { name: "Испаритель SMOK RPM 3 0.15", price: 390 },
+    { name: "Испаритель SMOK RPM 3 0.23", price: 390 },
+    { name: "Испаритель Smoant Charon BABY", price: 390 },
+    { name: "Испаритель Smoant K-1", price: 390 },
+    { name: "Испаритель Smoant K-2", price: 390 },
+    { name: "Испаритель Smoant K-3", price: 390 },
+    { name: "Испаритель Smoant S-5", price: 390 },
+    { name: "Испаритель Smoant S-6", price: 390 },
+    { name: "Испаритель Vaporesso GTX 0.2", price: 390 },
+    { name: "Испаритель Vaporesso GTX 0.15", price: 390 },
+    { name: "Испаритель Vaporesso GTX 0.3", price: 390 },
+    { name: "Испаритель Vaporesso GTX 0.4", price: 390 },
+    { name: "Испаритель Vaporesso GTX 0.6", price: 390 },
+    { name: "Испаритель Voopoo ITO - M2", price: 390 },
+    { name: "Испаритель Voopoo PnP - VM1", price: 390 },
+    { name: "Испаритель Voopoo PnP - VM6", price: 390 },
+    { name: "Испаритель Voopoo PnP VM4 0.6", price: 390 },
+    { name: "Испаритель Voopoo PnP VM5 0.2", price: 390 },
+    { name: "Испаритель Voopoo PnP X 0.15", price: 390 },
+    { name: "Испаритель Voopoo PnP X 0.2", price: 390 },
+    { name: "Испаритель Voopoo TPP - DM1 0.15", price: 390 },
+    { name: "Испаритель Voopoo TPP - DM2 0.2", price: 390 },
+    { name: "Испаритель Voopoo TPP - DM4 0.3", price: 390 }
+);
+</script>
+<script>
+// Продолжение массива products — картриджи и койлы
+products.push(
+    // Картриджи
+    { name: "Картридж FILIN MINI", price: 200 },
+    { name: "Картридж GEEKVAPE B100", price: 500 },
+    { name: "Картридж GEEKVAPE QPOD Q 0.8", price: 490 },
+    { name: "Картридж GEEKVAPE U 0.7", price: 490 },
+    { name: "Картридж HELLVAPE", price: 200 },
+    { name: "Картридж JELLYBOX NANO CARTRIDGE", price: 200 },
+    { name: "Картридж Pasito MINI 1", price: 300 },
+    { name: "Картридж SMOK NOVA 2 0.8", price: 200 },
+    { name: "Картридж SMOK NOVA 2 1.0", price: 200 },
+    { name: "Картридж Smoant Charon Baby +", price: 400 },
+    { name: "Картридж Smoant Knight 40", price: 200 },
+    { name: "Картридж Vaporesso LUXE X 0.6", price: 450 },
+    { name: "Картридж Vaporesso LUXE XR DTL", price: 400 },
+    { name: "Картридж Vaporesso LUXE XR MTL", price: 400 },
+    { name: "Картридж Vaporesso OSMALL 1.2", price: 200 },
+    { name: "Картридж Vaporesso XROS 0.6", price: 490 },
+    { name: "Картридж Vaporesso XROS 0.7", price: 490 },
+    { name: "Картридж Vaporesso XROS 0.8", price: 490 },
+    { name: "Картридж Voopoo Argus Pod 0.7", price: 490 },
+    { name: "Картридж Voopoo PnP X DTL", price: 490 },
+    { name: "Картридж Voopoo VMATE 0.4", price: 490 },
+    { name: "Картридж Voopoo VMATE 0.7", price: 490 },
 
-      // GeekVape
-      { id: 22, cat: "geekvape", name: "Dead Rabit RTA", price: 1990, img: "https://via.placeholder.com/300x200?text=Dead+Rabit+RTA" },
-      { id: 23, cat: "geekvape", name: "GeekVape Aegis Boost 3 Kit", price: 3990, img: "https://via.placeholder.com/300x200?text=Aegis+Boost+3+Kit" },
-      { id: 24, cat: "geekvape", name: "GeekVape Digi Q KIT Mecha Blue", price: 1990, img: "https://via.placeholder.com/300x200?text=Digi+Q+Mecha+Blue" },
-      { id: 25, cat: "geekvape", name: "GeekVape Digi Q KIT Mecha Pink", price: 1990, img: "https://via.placeholder.com/300x200?text=Digi+Q+Mecha+Pink" },
-      { id: 26, cat: "geekvape", name: "GeekVape H45 Crystal Pink", price: 3990, img: "https://via.placeholder.com/300x200?text=H45+Crystal+Pink" },
-      { id: 27, cat: "geekvape", name: "GeekVape Luxury Edition Space Black", price: 2990, img: "https://via.placeholder.com/300x200?text=Luxury+Edition+Space+Black" },
-      { id: 28, cat: "geekvape", name: "GeekVape Wenax Q Mini Gradient Gold", price: 1990, img: "https://via.placeholder.com/300x200?text=Wenax+Q+Mini+Gradient+Gold" },
-      { id: 29, cat: "geekvape", name: "GeekVape Wenax Q Mini Turquoise", price: 1990, img: "https://via.placeholder.com/300x200?text=Wenax+Q+Mini+Turquoise" },
-
-      // LOST MARY
-      { id: 30, cat: "lostmary", name: "LOST MARY MIXER+ Апельсин Клубника", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Апельсин+Клубника" },
-      { id: 31, cat: "lostmary", name: "LOST MARY MIXER+ Арбузные Конфеты", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Арбузные+Конфеты" },
-      { id: 32, cat: "lostmary", name: "LOST MARY MIXER+ Вишня Лимон", price: 2200, img: "https://via.placeholder.com/300x200?text=LOST+MARY+Вишня+Лимон" },
-      { id: 33, cat: "lostmary", name: "LOST MARY MIXER+ Грейпфрут Лимон Лайм", price: 2200, img: "https://via.placeholder.com/300x200?text=Грейпфрут+Лимон+Лайм" },
-      { id: 34, cat: "lostmary", name: "LOST MARY MIXER+ Зелёный Чай Лимон Лайм", price: 2200, img: "https://via.placeholder.com/300x200?text=Зелёный+Чай+Лимон+Лайм" },
-      { id: 35, cat: "lostmary", name: "LOST MARY MIXER+ Ледяной Арбуз", price: 2200, img: "https://via.placeholder.com/300x200?text=Ледяной+Арбуз" },
-      { id: 36, cat: "lostmary", name: "LOST MARY MIXER+ Малина Ананас", price: 2200, img: "https://via.placeholder.com/300x200?text=Малина+Ананас" },
-      { id: 37, cat: "lostmary", name: "LOST MARY MIXER+ Микс Мята", price: 2200, img: "https://via.placeholder.com/300x200?text=Микс+Мята" },
-      { id: 38, cat: "lostmary", name: "LOST MARY MIXER+ Черника Арбуз", price: 2200, img: "https://via.placeholder.com/300x200?text=Черника+Арбуз" },
-      { id: 39, cat: "lostmary", name: "LOST MARY MIXER+ Черника Малина Лёд", price: 2200, img: "https://via.placeholder.com/300x200?text=Черника+Малина+Лёд" },
-      { id: 40, cat: "lostmary", name: "LOST MARY MIXER+ Черника Малина Роза", price: 2200, img: "https://via.placeholder.com/300x200?text=Черника+Малина+Роза" },
-      { id: 41, cat: "lostmary", name: "LOST MARY MIXER+ Яблок Виноград", price: 2200, img: "https://via.placeholder.com/300x200?text=Яблок+Виноград" },
-      { id: 42, cat: "lostmary", name: "LOST MARY MIXER+ Яблочные Леденцы", price: 2200, img: "https://via.placeholder.com/300x200?text=Яблочные+Леденцы" },
-      { id: 43, cat: "lostmary", name: "Lost Mary BM16000 Перечная мята", price: 2200, img: "https://via.placeholder.com/300x200?text=BM16000+Перечная+мята" },
-      { id: 44, cat: "lostmary", name: "Lost Mary MO10000 Зелёное Манго", price: 2200, img: "https://via.placeholder.com/300x200?text=MO10000+Зелёное+Манго" },
-      { id: 45, cat: "lostmary", name: "Lost Mary MO10000 Смешанные Сливы", price: 2200, img: "https://via.placeholder.com/300x200?text=MO10000+Смешанные+Сливы" },
-      { id: 46, cat: "lostmary", name: "Lost Mary MO20000 PRO Двойное яблоко", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Двойное+яблоко" },
-      { id: 47, cat: "lostmary", name: "Lost Mary MO20000 PRO Жасмин малина", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Жасмин+малина" },
-      { id: 48, cat: "lostmary", name: "Lost Mary MO20000 PRO Зелёное Яблоко Байя Всплеск", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Зелёное+Яблоко+Байя+Всплеск" },
-      { id: 49, cat: "lostmary", name: "Lost Mary MO20000 PRO Ледяная мята", price: 2200, img: "https://via.placeholder.com/300x200?text=MO20000+Ледяная+мята" },
-
-      // Soak
-      { id: 50, cat: "soak", name: "Soak 4000 Айва Кардамон", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+4000+Айва+Кардамон" },
-      { id: 51, cat: "soak", name: "Soak 4000 Арахисовый Батончик", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+4000+Арахисовый+Батончик" },
-      { id: 52, cat: "soak", name: "Soak 4000 Кумкват", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+4000+Кумкват" },
-      { id: 53, cat: "soak", name: "Soak 6000 Гималайский черный чай", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+6000+Гималайский+черный+чай" },
-      { id: 54, cat: "soak", name: "Soak 6000 Облепиховый чай", price: 2200, img: "https://via.placeholder.com/300x200?text=Soak+6000+Облепиховый+чай" }
-    ];
-
-    let cart = [];
-
-    const catContainer = document.getElementById("categories");
-    const grid = document.getElementById("productGrid");
-    const cartCount = document.getElementById("cartCount");
-
-    function renderCategories() {
-      categories.forEach((c, i) => {
-        const btn = document.createElement("button");
-        btn.textContent = c.name;
-        if (i === 0) btn.classList.add("active");
-        btn.onclick = () => {
-          document.querySelectorAll("header button").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          renderProducts(c.id);
-        };
-        catContainer.appendChild(btn);
-      });
-    }
-
-    function renderProducts(cat) {
-      grid.innerHTML = "";
-      products.filter(p => p.cat === cat).forEach(p => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <div class="info">
-            <div class="name">${p.name}</div>
-            <div class="price">${p.price} ₽</div>
-            <button onclick="addToCart(${p.id})">В корзину</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      cart.push(product);
-      cartCount.textContent = `В корзине: ${cart.length}`;
-    }
-
-    function openCart() {
-      alert(cart.length ? cart.map(p => `${p.name} — ${p.price}₽`).join("\n") : "Корзина пуста");
-    }
-
-    renderCategories();
-    renderProducts(categories[0].id);
-  </script>
-</body>
-</html>
+    // Койлы
+    { name: "Койла FUSED 0.6", price: 200 },
+    { name: "Койла FUSED 0.85", price: 200 }
+);
+</script>
 
